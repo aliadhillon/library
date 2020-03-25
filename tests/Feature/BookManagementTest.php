@@ -30,7 +30,7 @@ class BookManagementTest extends TestCase
 
         $response = $this->post(route('books.store'), $data);
 
-        $book = Book::find(1);
+        $book = Book::first();
         
         $this->assertNotNull($book);
         $this->assertDatabaseHas('books', [

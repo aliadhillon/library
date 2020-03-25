@@ -31,7 +31,7 @@ class AuthorManagementTest extends TestCase
 
         $this->post(route('authors.store'), $data);
 
-        $author = Author::find(1);
+        $author = Author::first();
 
         $this->assertNotNull($author);
 
