@@ -19,14 +19,24 @@ class BookController extends Controller
 
     public function store(PostRequest $request)
     {
-        $book = Book::create($request->validated());
+        $validated = $request->validated();
+
+        $book = Book::create([
+            'title' => $validated['title'],
+            'author_id' => $validated['author'],
+        ]);
 
         return redirect()->route('books.show', ['book' => $book]);
     }
 
     public function update(PostRequest $request, Book $book)
     {
-        $book->update($request->validated());
+        $validated = $request->validated();
+
+        $book->update([
+            'title' => $validated['title'],
+            'author_id' => $validated['author'],
+        ]);
 
         return redirect()->route('books.show', ['book' => $book]);
     }
