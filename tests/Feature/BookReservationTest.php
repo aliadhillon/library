@@ -28,11 +28,17 @@ class BookReservationTest extends TestCase
             'author' => $this->faker->name,
         ];
 
-        $response = $this->post('/books', $data);
+        $response = $this->post(route('books.store'), $data);
 
-        $response->assertOk();
+        $book = Book::find(1);
+        
+        $this->assertNotNull($book);
+        $this->assertDatabaseHas('books', [
+            'id' => 1,
+            'title' => $data['title'],
+        ]);
 
-        $this->assertCount(1, Book::all());
+        $response->assertRedirect(route('books.show', ['book' => $book]));
     }
 
     public function test_title_is_required_for_new_book()
@@ -41,7 +47,7 @@ class BookReservationTest extends TestCase
             'author' => $this->faker->name,
         ];
 
-        $response = $this->post('/books', $data);
+        $response = $this->post(route('books.store'), $data);
 
         $response->assertSessionHasErrors(['title' => __('validation.required', ['attribute' => 'title'])]);
     }
@@ -52,7 +58,7 @@ class BookReservationTest extends TestCase
             'title' => $this->faker->words(3, true),
         ];
 
-        $response = $this->post('/books', $data);
+        $response = $this->post(route('books.store'), $data);
 
         $response->assertSessionHasErrors(['author' => __('validation.required', ['attribute' => 'author'])]);
     }
@@ -66,14 +72,14 @@ class BookReservationTest extends TestCase
             'author' => $this->faker->name,
         ];
 
-        $response = $this->patch('/books/' . $book->id, $data);
-
-        $response->assertOk();
+        $response = $this->patch(route('books.update', ['book' => $book]), $data);
 
         $book->refresh();
 
         $this->assertEquals($data['title'], $book->title);
         $this->assertEquals($data['author'], $book->author);
+
+        $response->assertRedirect(route('books.show', ['book' => $book]));
     }
 
     public function test_a_book_cannot_be_updated_without_title()
@@ -84,7 +90,7 @@ class BookReservationTest extends TestCase
             'author' => $this->faker->name,
         ];
 
-        $response = $this->patch('/books/' . $book->id, $data);
+        $response = $this->patch(route('books.update', ['book' => $book]), $data);
         
         $response->assertSessionHasErrors(['title' => __('validation.required', ['attribute' => 'title'])]);
     }
@@ -97,8 +103,22 @@ class BookReservationTest extends TestCase
             'title' => $this->faker->words(3, true),
         ];
 
-        $response = $this->patch('/books/' . $book->id, $data);
+        $response = $this->patch(route('books.update', ['book' => $book]), $data);
 
         $response->assertSessionHasErrors(['author' => __('validation.required', ['attribute' => 'author'])]);
+    }
+
+    public function test_a_book_can_be_deleted()
+    {
+        $this->withoutExceptionHandling();
+
+        $book = factory(Book::class)->create();
+
+        $response = $this->delete(route('books.destroy', ['book' => $book]));
+
+        $this->assertDeleted($book);
+        // $this->assertNull($book->fresh());
+
+        $response->assertRedirect(route('books.index'));
     }
 }
