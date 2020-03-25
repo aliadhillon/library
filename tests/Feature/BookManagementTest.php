@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Author;
 use App\Book;
 use Faker\Factory;
 use Tests\TestCase;
@@ -77,7 +78,7 @@ class BookManagementTest extends TestCase
         $book->refresh();
 
         $this->assertEquals($data['title'], $book->title);
-        $this->assertEquals($data['author'], $book->author);
+        $this->assertEquals($data['author'], $book->author->name);
 
         $response->assertRedirect(route('books.show', ['book' => $book]));
     }
@@ -120,5 +121,39 @@ class BookManagementTest extends TestCase
         // $this->assertNull($book->fresh());
 
         $response->assertRedirect(route('books.index'));
+    }
+
+    public function test_a_new_author_is_automatically_added()
+    {
+        $data = [
+            'title' => $this->faker->words(3, true),
+            'author' => $this->faker->name,
+        ];
+
+        $response = $this->post(route('books.store'), $data);
+
+        $book = Book::first();
+        $author = Author::first();
+
+        $this->assertNotNull($book);
+        $this->assertNotNull($author);
+        $this->assertEquals($author->id, $book->author_id);
+    }
+
+    public function test_an_already_existed_author_can_be_added()
+    {
+        $author = factory(Author::class)->create();
+
+        $data = [
+            'title' => $this->faker->words(3, true),
+            'author' => $author->name,
+        ];
+
+        $response = $this->post(route('books.store'), $data);
+
+        $book = Book::first();
+
+        $this->assertNotNull($book);
+        $this->assertEquals($book->author_id, $author->id);
     }
 }
