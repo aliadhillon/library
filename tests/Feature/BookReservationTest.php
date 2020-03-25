@@ -37,22 +37,24 @@ class BookReservationTest extends TestCase
 
     public function test_title_is_required_for_new_book()
     {
-        $response = $this->post('/books', [
-            'title' => '',
-            'author' => 'Ali Dhillon'
-        ]);
+        $data = [
+            'author' => $this->faker->name,
+        ];
 
-        $response->assertSessionHasErrors(['title']);
+        $response = $this->post('/books', $data);
+
+        $response->assertSessionHasErrors(['title' => __('validation.required', ['attribute' => 'title'])]);
     }
 
     public function test_author_is_required_for_new_book()
     {
-        $response = $this->post('/books', [
-            'title' => 'Test title',
-            'author' => ''
-        ]);
+        $data = [
+            'title' => $this->faker->words(3, true),
+        ];
 
-        $response->assertSessionHasErrors(['author']);
+        $response = $this->post('/books', $data);
+
+        $response->assertSessionHasErrors(['author' => __('validation.required', ['attribute' => 'author'])]);
     }
 
     public function test_a_book_can_be_updated()
