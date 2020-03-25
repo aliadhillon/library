@@ -66,7 +66,7 @@ class BookReservationTest extends TestCase
             'author' => $this->faker->name,
         ];
 
-        $response = $this->patch("/books/{$book->id}", $data);
+        $response = $this->patch('/books/' . $book->id, $data);
 
         $response->assertOk();
 
@@ -84,7 +84,7 @@ class BookReservationTest extends TestCase
             'author' => $this->faker->name,
         ];
 
-        $response = $this->patch("/books/{$book->id}", $data);
+        $response = $this->patch('/books/' . $book->id, $data);
         
         $response->assertSessionHasErrors(['title' => __('validation.required', ['attribute' => 'title'])]);
     }
@@ -97,7 +97,7 @@ class BookReservationTest extends TestCase
             'title' => $this->faker->words(3, true),
         ];
 
-        $response = $this->patch("/books/{$book->id}", $data);
+        $response = $this->patch('/books/' . $book->id, $data);
 
         $response->assertSessionHasErrors(['author' => __('validation.required', ['attribute' => 'author'])]);
     }
