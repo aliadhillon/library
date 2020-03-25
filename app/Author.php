@@ -8,7 +8,12 @@ class Author extends Model
 {
     protected $guarded = [];
 
-   protected $dates = [
-       'dob'
-   ];
+    protected $dates = [
+        'dob'
+    ];
+
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
 }
