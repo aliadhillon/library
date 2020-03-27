@@ -4,23 +4,13 @@ namespace Tests\Feature;
 
 use App\Author;
 use Carbon\Carbon;
-use Faker\Factory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthorManagementTest extends TestCase
 {
-    use RefreshDatabase;
-
-    protected $faker;
-
-    protected function setUp(): void
-    {
-        $this->faker = Factory::create();
-
-        parent::setUp();
-    }
+    use RefreshDatabase, WithFaker;
 
     public function test_an_author_can_be_created()
     {
