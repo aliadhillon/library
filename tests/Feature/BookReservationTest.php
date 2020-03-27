@@ -20,7 +20,7 @@ class BookReservationTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->actingAs($user)
-            ->post('/checkout/' . $book->id);
+            ->post(route('checkout', ['book' => $book]));
 
         $this->assertCount(1, $book->reservations);
 
@@ -38,7 +38,7 @@ class BookReservationTest extends TestCase
     {
         $book = factory(Book::class)->create();
 
-        $this->post('/checkout/' . $book->id)
+        $this->post(route('checkout', ['book' => $book]))
                 ->assertRedirect(route('login'));
 
         $this->assertCount(0, $book->reservations);
@@ -49,7 +49,7 @@ class BookReservationTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->actingAs($user)
-            ->post('/checkout/' . 100)
+            ->post(route('checkout', ['book' => 100]))
             ->assertStatus(404);
 
         $this->assertCount(0, Reservation::all());
@@ -63,7 +63,7 @@ class BookReservationTest extends TestCase
         $book->checkout($user);
 
         $this->actingAs($user)
-            ->post('/checkin/' . $book->id);
+            ->post(route('checkin', ['book' => $book]));
 
         $this->assertCount(1, $book->reservations);
 
@@ -84,7 +84,7 @@ class BookReservationTest extends TestCase
 
         $book->checkout($user);
 
-        $this->post('/checkin/' . $book->id)
+        $this->post(route('checkin', ['book' => $book]))
             ->assertRedirect(route('login'));
 
         $this->assertCount(1, $book->reservations);
@@ -102,7 +102,7 @@ class BookReservationTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->actingAs($user)
-            ->post('/checkin/' . 100)
+            ->post(route('checkin', ['book' => 100]))
             ->assertStatus(404);
 
         $this->assertCount(0, Reservation::all());
@@ -114,7 +114,7 @@ class BookReservationTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->actingAs($user)
-            ->post('/checkin/' . $book->id)
+            ->post(route('checkin', ['book' => $book]))
             ->assertStatus(404);
 
         $this->assertCount(0, $book->reservations);
