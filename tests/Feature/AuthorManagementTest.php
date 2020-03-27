@@ -17,7 +17,7 @@ class AuthorManagementTest extends TestCase
         $data = [
             'name' => $this->faker->name,
             'dob' => $this->faker->date(),
-        ];    
+        ];
 
         $this->post(route('authors.store'), $data);
 
@@ -26,5 +26,25 @@ class AuthorManagementTest extends TestCase
         $this->assertNotNull($author);
 
         $this->assertInstanceOf(Carbon::class, $author->dob);
+    }
+
+    public function test_a_name_is_required()
+    {
+        $data = [
+            'dob' => $this->faker->date(),
+        ];
+
+        $this->post(route('authors.store'), $data)
+                ->assertSessionHasErrors('name');
+    }
+
+    public function test_a_dob_is_required()
+    {
+        $data = [
+            'name' => $this->faker->name,
+        ];
+
+        $this->post(route('authors.store'), $data)
+                ->assertSessionHasErrors('dob');
     }
 }
