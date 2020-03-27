@@ -3,10 +3,9 @@
 namespace Tests\Unit;
 
 use App\Book;
+use App\Exceptions\ReservationNotFoundException;
 use App\User;
 use Tests\TestCase;
-use App\Reservation;
-use Exception;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -23,7 +22,7 @@ class BookReservationTest extends TestCase
 
         $this->assertCount(1, $book->reservations);
 
-        $reservation = Reservation::first();
+        $reservation = $book->reservations->first();
 
         $this->assertNotNull($reservation);
 
@@ -45,7 +44,7 @@ class BookReservationTest extends TestCase
 
         $this->assertCount(1, $book->reservations);
 
-        $reservation = Reservation::first();
+        $reservation = $book->reservations->first();
 
         $this->assertNotNull($reservation);
 
@@ -99,7 +98,7 @@ class BookReservationTest extends TestCase
 
     public function test_check_in_without_check_out_should_throw_exception()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(ReservationNotFoundException::class);
 
         $book = factory(Book::class)->create();
         $user = factory(User::class)->create();
