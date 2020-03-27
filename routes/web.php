@@ -30,5 +30,5 @@ Route::delete('/books/{book}', 'BookController@destroy')->name('books.destroy');
 
 Route::post('/authors', 'AuthorController@store')->name('authors.store');
 
-Route::post('/checkout/{book}', 'CheckoutBookController@store');
-Route::post('/checkin/{book}', 'CheckinBookController@store');
+Route::post('/checkout/{book}', 'CheckoutBookController@store')->name('checkout');
+Route::post('/checkin/{book}', 'CheckinBookController@store')->name('checkin');
