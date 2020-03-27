@@ -29,3 +29,6 @@ Route::patch('/books/{book}', 'BookController@update')->name('books.update');
 Route::delete('/books/{book}', 'BookController@destroy')->name('books.destroy');
 
 Route::post('/authors', 'AuthorController@store')->name('authors.store');
+
+Route::post('/checkout/{book}', 'CheckoutBookController@store');
+Route::post('/checkin/{book}', 'CheckinBookController@store');
