@@ -11,16 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BookManagementTest extends TestCase
 {
-    use RefreshDatabase;
-
-    protected $faker;
-
-    protected function setUp(): void
-    {
-        $this->faker = Factory::create();
-
-        parent::setUp();
-    }
+    use RefreshDatabase, WithFaker;
     
     public function test_a_book_can_be_added_to_library()
     {
