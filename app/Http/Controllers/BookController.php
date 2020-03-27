@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
-use App\Http\Requests\PostRequest;
+use App\Http\Requests\BookRequest;
 
 class BookController extends Controller
 {
@@ -17,7 +17,7 @@ class BookController extends Controller
         return $book;
     }
 
-    public function store(PostRequest $request)
+    public function store(BookRequest $request)
     {
         $validated = $request->validated();
 
@@ -29,7 +29,7 @@ class BookController extends Controller
         return redirect()->route('books.show', ['book' => $book]);
     }
 
-    public function update(PostRequest $request, Book $book)
+    public function update(BookRequest $request, Book $book)
     {
         $validated = $request->validated();
 
