@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 7.4
+
+os: linux
+
+before_script:
+  - cp .env.example .env
+  - composer install
+  - php artisan key:generate
+  - touch database/database.sqlite
+
+script:
+  - vendor/bin/phpunit
