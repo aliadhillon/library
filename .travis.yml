@@ -10,7 +10,6 @@ before_script:
   - cp .env.example .env
   - composer install
   - php artisan key:generate
-  - touch database/database.sqlite
 
 script:
   - vendor/bin/phpunit
